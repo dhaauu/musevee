@@ -103,9 +103,10 @@
       heroTitle1: 'Musik offline & online,',
       heroTitle2: 'dalam satu pemutar.',
       heroSubtitle:
-        'Pemutar musik hybrid modern untuk Android yang menggabungkan koleksi lagu lokal dan streaming online dalam satu tampilan bersih. Putar musik bebas iklan dengan lirik berjalan, Romaji instan, dan unduh lagu offline lengkap dengan metadata.',
+        'Pemutar musik hybrid modern untuk Android yang menggabungkan koleksi lagu lokal dan streaming online dalam satu tampilan bersih.',
       heroDownloadBtn: 'Unduh APK',
       heroExploreBtn: 'Lihat Fitur',
+      heroDownloadsLabel: 'unduhan sejauh ini',
       stat1Val: 'Hybrid',
       stat1Lbl: 'Lokal & Online',
       stat2Val: 'Bebas Iklan',
@@ -186,7 +187,7 @@
       faqFeedbackDesc:
         'Bantu kami menyempurnakan MusEvee di pembaruan berikutnya dengan mengirimkan laporan bug atau ide fiturmu.',
       faqFeedbackBtn: 'Kirim Masukan & Lapor Bug',
-      footerNote: 'Satu pemutar musik hybrid untuk semua lagumu. • Demo BGM: しゃろう (Sharou)',
+      footerNote: 'Satu pemutar musik hybrid untuk semua lagumu.',
       ariaMenu: 'Menu',
       ariaLyricsSource: 'Sumber lirik',
       ariaSelectLyrics: 'Pilih lirik',
@@ -225,9 +226,10 @@
       heroTitle1: 'Offline & online music,',
       heroTitle2: 'in one clean player.',
       heroSubtitle:
-        'A modern hybrid music player for Android combining your local library and online streaming in one clean interface. Play ad-free with live lyrics, instant Romaji, and offline downloads with automatic metadata.',
+        'A modern hybrid music player for Android combining your local library and online streaming in one clean interface.',
       heroDownloadBtn: 'Download APK',
       heroExploreBtn: 'View Features',
+      heroDownloadsLabel: 'downloads so far',
       stat1Val: 'Hybrid',
       stat1Lbl: 'Local & Online',
       stat2Val: 'Ad-Free',
@@ -308,7 +310,7 @@
       faqFeedbackDesc:
         'Help us improve MusEvee in upcoming updates by sharing your bug report or feature request.',
       faqFeedbackBtn: 'Send Feedback & Report Bug',
-      footerNote: 'One hybrid music player for all your music. • Demo BGM: しゃろう (Sharou)',
+      footerNote: 'One hybrid music player for all your music.',
       ariaMenu: 'Menu',
       ariaLyricsSource: 'Lyrics source',
       ariaSelectLyrics: 'Select lyrics',
@@ -358,7 +360,8 @@
     choreoTimers: [],
     phoneSnackTimer: null,
     pageSnackTimer: null,
-    modeSeq: 0
+    modeSeq: 0,
+    totalDownloads: null
   };
 
   // -------------------- Real HTML5 Audio Engine --------------------
@@ -373,6 +376,7 @@
   const langToggleLabel = document.getElementById('langToggleLabel');
 
   // Hero elements
+  const heroDownloadCount = document.getElementById('heroDownloadCount');
   const heroVinylDisc = document.getElementById('heroVinylDisc');
   const heroPrevBtn = document.getElementById('heroPrevBtn');
   const heroPlayBtn = document.getElementById('heroPlayBtn');
@@ -472,6 +476,62 @@
     }, 2400);
   }
 
+  // -------------------- Hero Live Download Counter --------------------
+  function renderDownloadCount() {
+    if (!heroDownloadCount) return;
+    const count = typeof state.totalDownloads === 'number' && state.totalDownloads >= 0 ? state.totalDownloads : 0;
+    const locale = state.lang === 'id' ? 'id-ID' : 'en-US';
+    heroDownloadCount.textContent = count.toLocaleString(locale);
+  }
+
+  async function fetchGitHubDownloads() {
+    const cacheKey = 'musevee_dl_count_v1';
+    const ttlMs = 10 * 60 * 1000;
+    let cached = null;
+    try {
+      const raw = localStorage.getItem(cacheKey);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed.count === 'number' && typeof parsed.ts === 'number') {
+          cached = parsed;
+          state.totalDownloads = parsed.count;
+          renderDownloadCount();
+          if (Date.now() - parsed.ts < ttlMs) return;
+        }
+      }
+    } catch (_) {}
+
+    if (typeof fetch !== 'function') return;
+    try {
+      const res = await fetch('https://api.github.com/repos/hdkmjr12/musevee/releases', {
+        headers: { Accept: 'application/vnd.github+json' }
+      });
+      if (!res.ok) return;
+      const releases = await res.json();
+      if (!Array.isArray(releases)) return;
+      let total = 0;
+      releases.forEach((rel) => {
+        if (rel && Array.isArray(rel.assets)) {
+          rel.assets.forEach((asset) => {
+            if (asset && typeof asset.download_count === 'number') {
+              total += asset.download_count;
+            }
+          });
+        }
+      });
+      state.totalDownloads = total;
+      renderDownloadCount();
+      try {
+        localStorage.setItem(cacheKey, JSON.stringify({ count: total, ts: Date.now() }));
+      } catch (_) {}
+    } catch (_) {
+      if (!cached && state.totalDownloads === null) {
+        state.totalDownloads = 0;
+        renderDownloadCount();
+      }
+    }
+  }
+
   // -------------------- Theme & Language --------------------
   function applyTheme(nextTheme) {
     state.theme = nextTheme;
@@ -505,6 +565,7 @@
     });
 
     updateModeSpecCard(state.activeMode);
+    renderDownloadCount();
     try {
       localStorage.setItem('musevee_web_lang_v2', nextLang);
     } catch (_) {}
@@ -875,11 +936,11 @@
     applyLanguage(state.lang === 'id' ? 'en' : 'id');
   });
 
-  // Hero controls
-  heroVinylDisc.addEventListener('click', togglePlayPause);
-  heroPlayBtn.addEventListener('click', togglePlayPause);
-  heroPrevBtn.addEventListener('click', () => setTrack(state.trackIdx - 1));
-  heroNextBtn.addEventListener('click', () => setTrack(state.trackIdx + 1));
+  // Hero controls (when present)
+  if (heroVinylDisc) heroVinylDisc.addEventListener('click', togglePlayPause);
+  if (heroPlayBtn) heroPlayBtn.addEventListener('click', togglePlayPause);
+  if (heroPrevBtn) heroPrevBtn.addEventListener('click', () => setTrack(state.trackIdx - 1));
+  if (heroNextBtn) heroNextBtn.addEventListener('click', () => setTrack(state.trackIdx + 1));
 
   // Mode buttons
   modeBtns.forEach((btn) => {
@@ -1073,6 +1134,7 @@
   syncTrackUI();
   updatePlayIcons();
   applyLanguage(state.lang);
+  fetchGitHubDownloads();
   setMode('now-playing', { animate: false });
   revealVisibleNow();
   window.addEventListener('load', revealVisibleNow);
