@@ -81,6 +81,24 @@
   --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
   --ease-mograph-split: cubic-bezier(0.22, 1.16, 0.36, 1);
   --ease-spring-morph: cubic-bezier(0.32, 1.24, 0.48, 1);
+
+  /* Unified Spacing, Card & Button Tokens */
+  --space-section-y: 64px;
+  --space-section-y-mobile: 48px;
+  --space-header-gap: 32px;
+  --space-header-gap-mobile: 24px;
+  --space-grid-gap: 16px;
+  --space-card-pad: 24px;
+  --space-stack-sm: 12px;
+  --space-stack-md: 16px;
+  --space-stack-lg: 24px;
+  --card-radius: 18px;
+  --card-border: 1px solid var(--hairline);
+  --card-border-hover: var(--hairline-strong);
+  --card-shadow-flat: none;
+  --btn-height: 48px;
+  --btn-height-nav: 36px;
+  --btn-radius: 999px;
 }
 
 /* ---------- MusEveePalette.dark ---------- */
@@ -127,6 +145,7 @@
 html {
   scroll-behavior: smooth;
   font-size: 16px;
+  overflow-x: clip;
 }
 
 body {
@@ -137,7 +156,7 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
+  overflow-x: clip;
   transition: background-color 0.3s var(--ease-out-cubic), color 0.3s var(--ease-out-cubic);
 }
 
@@ -269,23 +288,28 @@ svg {
 }
 
 .icon-pill-btn {
-  height: 36px;
+  height: var(--btn-height-nav);
   min-width: 36px;
-  padding: 0 11px;
-  border-radius: 999px;
-  border: 1px solid var(--hairline);
-  background: var(--surface-card);
-  color: var(--text-primary);
+  padding: 0 12px;
+  border-radius: var(--btn-radius);
+  border: 1px solid var(--hairline-strong);
+  background: transparent;
+  color: var(--text-strong);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   font-weight: 600;
+}
+
+#themeToggleBtn {
+  width: 36px;
+  padding: 0;
 }
 
 .icon-pill-btn:hover {
   background: var(--surface-subtle);
-  border-color: var(--hairline-strong);
+  border-color: var(--np-primary);
 }
 
 .theme-icon {
@@ -307,16 +331,18 @@ svg {
 }
 
 .nav-download-btn {
-  height: 36px;
-  padding: 0 16px;
-  border-radius: 999px;
+  height: var(--btn-height-nav);
+  padding: 0 15px;
+  border-radius: var(--btn-radius);
+  border: 1px solid var(--np-primary);
   background: var(--np-primary);
   color: var(--np-on-primary);
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 600;
   display: inline-flex;
   align-items: center;
-  gap: 7px;
+  justify-content: center;
+  gap: 6px;
 }
 
 .nav-download-btn:hover {
@@ -325,7 +351,9 @@ svg {
 
 /* ---------- Pure Minimalist Monochrome Hero ---------- */
 .hero {
-  padding: 76px 0 88px;
+  padding: 52px 0 var(--space-section-y);
+  background-color: var(--bg-pure);
+  transition: background-color 0.3s var(--ease-out-cubic);
 }
 
 .hero-grid {
@@ -356,7 +384,7 @@ svg {
 }
 
 .hero-title {
-  margin: 0 0 20px;
+  margin: 0 0 16px;
   font-size: clamp(2.05rem, 3.55vw, 3.2rem);
   font-weight: 700;
   line-height: 1.12;
@@ -375,7 +403,7 @@ svg {
 }
 
 .hero-subtitle {
-  margin: 0 0 32px;
+  margin: 0 0 24px;
   font-size: 1rem;
   color: var(--text-muted);
   max-width: 630px;
@@ -387,20 +415,22 @@ svg {
   flex-wrap: wrap;
   align-items: center;
   gap: 12px;
-  margin-bottom: 36px;
+  margin-bottom: 24px;
 }
 
 .btn-primary {
-  height: 50px;
-  padding: 0 24px;
-  border-radius: 999px;
+  height: var(--btn-height);
+  padding: 0 22px;
+  border-radius: var(--btn-radius);
   background: var(--np-primary);
   color: var(--np-on-primary);
-  font-size: 0.9rem;
+  border: 1px solid var(--np-primary);
+  font-size: 0.88rem;
   font-weight: 600;
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
+  gap: 9px;
 }
 
 .btn-primary:hover {
@@ -417,32 +447,34 @@ svg {
 }
 
 .btn-secondary {
-  height: 50px;
-  padding: 0 18px;
-  border-radius: 999px;
+  height: var(--btn-height);
+  padding: 0 22px;
+  border-radius: var(--btn-radius);
   background: transparent;
-  border: none;
+  border: 1px solid var(--hairline-strong);
   color: var(--text-strong);
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   font-weight: 600;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  transition: opacity 0.2s ease, transform 0.22s var(--ease-out-cubic);
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.22s var(--ease-out-cubic);
 }
 
 .btn-secondary:hover {
-  background: transparent;
-  opacity: 0.68;
+  background: var(--surface-subtle);
+  border-color: var(--np-primary);
+  opacity: 1;
   transform: translateY(-1px);
 }
 
 .hero-stats {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, auto));
-  gap: 32px;
+  gap: 28px;
   max-width: 520px;
-  padding-top: 24px;
+  padding-top: 20px;
   border-top: 1px solid var(--hairline);
 }
 
@@ -465,19 +497,19 @@ svg {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
 }
 
 .hero-vinyl-card {
   position: relative;
   width: min(390px, 100%);
-  height: 280px;
-  border-radius: 26px;
+  height: 274px;
+  border-radius: var(--card-radius);
   background: var(--np-bg);
-  border: 1px solid var(--hairline);
-  box-shadow: var(--card-shadow);
+  border: var(--card-border);
+  box-shadow: var(--card-shadow-flat);
   overflow: hidden;
-  padding: 24px 22px;
+  padding: 22px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -494,38 +526,43 @@ svg {
 .hero-card-lyrics {
   position: relative;
   z-index: 2;
-  width: 52%;
+  width: 59%;
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
 .hero-ly-muted {
-  font-size: 0.76rem;
+  font-size: 0.78rem;
+  font-weight: 400;
   color: var(--np-secondary);
-  line-height: 1.3;
+  line-height: 1.38;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 .hero-ly-active {
-  font-size: 1.14rem;
-  font-weight: 500;
+  font-size: 0.96rem;
+  font-weight: 600;
   color: var(--np-primary);
-  line-height: 1.24;
-  letter-spacing: -0.02em;
+  line-height: 1.32;
+  letter-spacing: -0.015em;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 .hero-card-disc {
   position: absolute;
-  left: 56%;
+  left: 62%;
   top: 50%;
-  width: 244px;
-  height: 244px;
+  width: 234px;
+  height: 234px;
   transform: translateY(-50%);
   border-radius: 50%;
   padding: 5px;
   background: var(--np-bg);
   border: 1.6px solid var(--disc-ring);
-  box-shadow: 0 12px 32px var(--disc-shadow);
+  box-shadow: 0 8px 22px var(--disc-shadow);
   cursor: pointer;
   transition: transform 0.35s var(--ease-out-back), border-color 0.3s ease;
 }
@@ -590,12 +627,12 @@ svg {
 /* Authentic Floating Mini Player matching real MusEvee Home screenshot */
 .hero-mini-player {
   width: min(390px, 100%);
-  height: 64px;
+  height: 62px;
   padding: 0 12px;
-  border-radius: 16px;
+  border-radius: var(--card-radius);
   background: var(--surface-card);
-  border: 1px solid var(--hairline);
-  box-shadow: var(--card-shadow);
+  border: var(--card-border);
+  box-shadow: var(--card-shadow-flat);
   display: flex;
   align-items: center;
   gap: 12px;
@@ -709,12 +746,15 @@ svg {
 
 /* ---------- Shared Section Styling ---------- */
 .section {
-  padding: 92px 0;
+  padding: var(--space-section-y) 0;
   position: relative;
+  background-color: var(--bg-pure);
+  scroll-margin-top: 68px;
+  transition: background-color 0.3s var(--ease-out-cubic), border-color 0.3s ease;
 }
 
 .section-tinted {
-  background: var(--bg-canvas);
+  background-color: var(--bg-canvas);
   border-top: 1px solid var(--hairline);
   border-bottom: 1px solid var(--hairline);
 }
@@ -725,18 +765,12 @@ svg {
 
 .section-header {
   max-width: 640px;
-  margin-bottom: 44px;
-}
-
-.section-header.centered {
-  margin-inline: auto;
-  text-align: center;
+  margin: 0 0 var(--space-header-gap);
+  text-align: left;
 }
 
 .section-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
+  display: inline-block;
   font-size: 0.74rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -746,13 +780,17 @@ svg {
 }
 
 .section-title {
-  margin: 0 0 12px;
+  margin: 0 0 10px;
   font-size: clamp(1.8rem, 3.2vw, 2.55rem);
   font-weight: 700;
   letter-spacing: -0.032em;
   line-height: 1.14;
   color: var(--text-strong);
   text-wrap: balance;
+}
+
+.section-title:last-child {
+  margin-bottom: 0;
 }
 
 .section-desc {
@@ -765,7 +803,7 @@ svg {
 /* ---------- Interactive Playground Studio (4 Focused Modes) ---------- */
 .playground-shell {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(350px, 430px);
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 360px);
   gap: 40px;
   align-items: center;
 }
@@ -773,41 +811,41 @@ svg {
 .playground-controls {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: var(--space-grid-gap);
 }
 
 .mode-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: var(--space-stack-sm);
 }
 
 .mode-btn {
   width: 100%;
   text-align: left;
-  padding: 16px 18px;
-  border-radius: 16px;
+  padding: 17px 20px;
+  border-radius: var(--card-radius);
   background: var(--surface-card);
-  border: 1px solid var(--hairline);
+  border: var(--card-border);
+  box-shadow: var(--card-shadow-flat);
   display: flex;
   align-items: center;
   gap: 14px;
   transition:
     background-color 0.22s ease,
     border-color 0.22s ease,
-    transform 0.26s var(--ease-out-back),
-    box-shadow 0.24s ease;
+    transform 0.26s var(--ease-out-back);
 }
 
 .mode-btn:hover {
-  border-color: var(--hairline-strong);
+  border-color: var(--card-border-hover);
 }
 
 .mode-btn.is-active {
   background: var(--np-primary);
   color: var(--np-on-primary);
   border-color: var(--np-primary);
-  box-shadow: 0 12px 28px var(--disc-shadow);
+  box-shadow: none;
 }
 
 .mode-btn-icon {
@@ -869,10 +907,11 @@ svg {
 
 /* Mode Caption & Track Switcher */
 .mode-detail-card {
-  padding: 20px;
-  border-radius: 18px;
+  padding: var(--space-card-pad);
+  border-radius: var(--card-radius);
   background: var(--surface-card);
-  border: 1px solid var(--hairline);
+  border: var(--card-border);
+  box-shadow: var(--card-shadow-flat);
 }
 
 .mode-detail-top {
@@ -956,9 +995,9 @@ svg {
 }
 
 .phone-frame {
-  width: 318px;
-  height: 678px;
-  border-radius: 44px;
+  width: 306px;
+  height: 598px;
+  border-radius: 42px;
   padding: 10px;
   background: linear-gradient(155deg, #272A33 0%, #101216 55%, #1E2129 100%);
   box-shadow: var(--phone-shadow), inset 0 0 0 1px rgba(255, 255, 255, 0.14);
@@ -1134,10 +1173,10 @@ svg {
 .np-intro-lyrics {
   position: relative;
   z-index: 2;
-  width: 53%;
+  width: 56%;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 
 .intro-lyric {
@@ -1146,33 +1185,37 @@ svg {
 
 .intro-lyric-prev,
 .intro-lyric-next {
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 400;
   color: var(--np-secondary);
-  line-height: 1.32;
+  line-height: 1.35;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 .intro-lyric-active {
-  font-size: 1.18rem;
-  font-weight: 500;
+  font-size: 1.02rem;
+  font-weight: 600;
   color: var(--np-primary);
-  line-height: 1.24;
-  letter-spacing: -0.02em;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 /* Giant Right-Peeking Vinyl Disc */
 .np-vinyl-disc {
   position: absolute;
-  left: 59%;
+  left: 60%;
   top: 50%;
-  width: 274px;
-  height: 274px;
+  width: 248px;
+  height: 248px;
   transform: translateY(-50%);
   border-radius: 50%;
   padding: 4px;
   background: var(--np-bg);
   border: 1.5px solid var(--disc-ring);
-  box-shadow: 0 12px 34px var(--disc-shadow);
+  box-shadow: 0 8px 24px var(--disc-shadow);
   cursor: pointer;
   transition: transform 0.34s var(--ease-out-back), border-color 0.3s ease;
 }
@@ -2075,72 +2118,79 @@ svg {
 }
 
 .stage-tap-hint {
-  margin-top: 14px;
-  font-size: 0.75rem;
+  margin-top: 0;
+  font-size: 0.78rem;
   color: var(--text-muted);
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  text-align: center;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  text-align: left;
+  line-height: 1.5;
+  padding: 0 2px;
+}
+
+.stage-tap-hint svg {
+  flex-shrink: 0;
+  margin-top: 2px;
 }
 
 /* ---------- Pure Monochrome Bento Features ---------- */
 .bento-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
+  gap: var(--space-grid-gap);
 }
 
 .bento-card {
-  padding: 28px;
-  border-radius: 20px;
+  padding: var(--space-card-pad);
+  border-radius: var(--card-radius);
   background: var(--surface-card);
-  border: 1px solid var(--hairline);
+  border: var(--card-border);
+  box-shadow: var(--card-shadow-flat);
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  transition: transform 0.28s var(--ease-out-cubic), border-color 0.22s ease, box-shadow 0.28s ease;
+  gap: var(--space-stack-sm);
+  transition: transform 0.28s var(--ease-out-cubic), border-color 0.22s ease;
 }
 
 .bento-card:hover {
-  transform: translateY(-3px);
-  border-color: var(--hairline-strong);
-  box-shadow: var(--card-shadow);
-}
-
-.bento-card.is-wide {
-  grid-column: span 2;
+  transform: translateY(-2px);
+  border-color: var(--card-border-hover);
+  box-shadow: var(--card-shadow-flat);
 }
 
 .bento-icon {
-  width: 24px;
-  height: 24px;
-  border-radius: 0;
-  background: transparent;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: var(--surface-subtle);
+  border: 1px solid var(--hairline);
   color: var(--np-primary);
   display: inline-flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
 .bento-title {
   margin: 4px 0 0;
-  font-size: 1.05rem;
+  font-size: 0.96rem;
   font-weight: 600;
+  line-height: 1.32;
   color: var(--text-strong);
-  letter-spacing: -0.015em;
+  letter-spacing: -0.02em;
 }
 
 .bento-desc {
   margin: 0;
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   color: var(--text-muted);
-  line-height: 1.65;
+  line-height: 1.62;
 }
 
 .bento-tags {
-  margin-top: auto;
-  padding-top: 8px;
+  margin-top: 4px;
+  padding-top: 0;
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
@@ -2155,91 +2205,24 @@ svg {
   border-radius: 999px;
 }
 
-/* ---------- Tactile Craft Strip ---------- */
-.craft-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
-}
-
-.craft-card {
-  padding: 26px;
-  border-radius: 20px;
-  background: var(--surface-card);
-  border: 1px solid var(--hairline);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 20px;
-}
-
-.craft-title {
-  margin: 0 0 6px;
-  font-size: 0.98rem;
-  font-weight: 600;
-  color: var(--text-strong);
-}
-
-.craft-desc {
-  margin: 0;
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  line-height: 1.6;
-}
-
-.craft-action-btn {
-  height: 42px;
-  padding: 0 16px;
-  border-radius: 999px;
-  background: var(--surface-subtle);
-  color: var(--text-strong);
-  font-size: 0.82rem;
-  font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-}
-
-.craft-action-btn:hover {
-  background: var(--surface-hover);
-}
-
-.spring-pad-btn {
-  height: 42px;
-  border-radius: 999px;
-  background: var(--np-primary);
-  color: var(--np-on-primary);
-  font-size: 0.82rem;
-  font-weight: 600;
-  width: 100%;
-  transition: transform 0.25s var(--ease-out-back);
-}
-
-.spring-pad-btn:active {
-  transform: scale(0.86);
-  transition-duration: 0.085s;
-  transition-timing-function: var(--ease-out-cubic);
-}
-
-/* ---------- Download Center Card ---------- */
+/* ---------- Download Center Layout ---------- */
 .download-card {
-  padding: 48px 50px;
-  border-radius: 26px;
-  background: var(--surface-card);
-  border: 1px solid var(--hairline);
-  box-shadow: var(--card-shadow);
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
   display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-  gap: 44px;
-  align-items: center;
+  grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr);
+  gap: 40px;
+  align-items: start;
 }
 
 .dl-spec-pills {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin: 18px 0 26px;
+  margin: 20px 0 24px;
 }
 
 .dl-spec-pill {
@@ -2255,11 +2238,12 @@ svg {
 .install-steps {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 28px;
-  border-radius: 22px;
+  gap: var(--space-stack-md);
+  padding: var(--space-card-pad);
+  border-radius: var(--card-radius);
   background: var(--surface-card);
-  border: 1px solid var(--hairline-strong);
+  border: var(--card-border);
+  box-shadow: var(--card-shadow-flat);
 }
 
 .install-steps-title {
@@ -2301,28 +2285,30 @@ svg {
 
 /* ---------- FAQ Accordion ---------- */
 .faq-list {
-  max-width: 760px;
-  margin-inline: auto;
+  width: 100%;
+  max-width: 100%;
+  margin-inline: 0;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: var(--space-stack-sm);
 }
 
 .faq-item {
-  border-radius: 16px;
+  border-radius: var(--card-radius);
   background: var(--surface-card);
-  border: 1px solid var(--hairline);
+  border: var(--card-border);
+  box-shadow: var(--card-shadow-flat);
   overflow: hidden;
   transition: border-color 0.2s ease;
 }
 
 .faq-item.is-open {
-  border-color: var(--hairline-strong);
+  border-color: var(--card-border-hover);
 }
 
 .faq-q {
   width: 100%;
-  padding: 18px 22px;
+  padding: 18px var(--space-card-pad);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -2362,19 +2348,22 @@ svg {
 
 .faq-a {
   margin: 0;
-  padding: 0 22px 18px;
+  padding: 0 var(--space-card-pad) 18px;
+  max-width: 74ch;
   font-size: 0.88rem;
   color: var(--text-muted);
   line-height: 1.65;
 }
 
 .faq-feedback-card {
-  max-width: 760px;
-  margin: 22px auto 0;
-  padding: 22px 24px;
-  border-radius: 18px;
+  width: 100%;
+  max-width: 100%;
+  margin: var(--space-grid-gap) 0 0;
+  padding: var(--space-card-pad);
+  border-radius: var(--card-radius);
   background: var(--surface-card);
-  border: 1px solid var(--hairline);
+  border: var(--card-border);
+  box-shadow: var(--card-shadow-flat);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -2438,10 +2427,12 @@ svg {
 
 /* ---------- Footer ---------- */
 .site-footer {
+  background-color: var(--bg-pure);
   border-top: 1px solid var(--hairline);
-  padding: 36px 0 48px;
+  padding: 28px 0 32px;
   color: var(--text-muted);
   font-size: 0.84rem;
+  transition: background-color 0.3s var(--ease-out-cubic), border-color 0.3s ease;
 }
 
 .footer-inner {
@@ -2486,7 +2477,7 @@ svg {
 @media (max-width: 1024px) {
   .hero-grid {
     grid-template-columns: 1fr;
-    gap: 44px;
+    gap: 32px;
   }
 
   .hero-visual {
@@ -2495,6 +2486,7 @@ svg {
 
   .playground-shell {
     grid-template-columns: 1fr;
+    gap: 28px;
   }
 
   .playground-stage {
@@ -2506,18 +2498,14 @@ svg {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .bento-grid,
-  .craft-grid {
+  .bento-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .bento-card.is-wide {
-    grid-column: span 2;
   }
 
   .download-card {
     grid-template-columns: 1fr;
-    padding: 30px;
+    gap: 24px;
+    padding: 0;
   }
 }
 
@@ -2544,34 +2532,78 @@ svg {
 
 @media (max-width: 720px) {
   .container {
-    width: min(100% - 28px, 1120px);
+    width: min(100% - 32px, 1220px);
   }
 
   .hero {
-    padding: 46px 0 64px;
+    padding: 36px 0 var(--space-section-y-mobile);
+  }
+
+  .section {
+    padding: var(--space-section-y-mobile) 0;
+  }
+
+  .section-header {
+    margin-bottom: var(--space-header-gap-mobile);
+  }
+
+  .hero-stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    max-width: 100%;
   }
 
   .hero-visual {
     align-items: center;
   }
 
+  .hero-vinyl-card {
+    height: 256px;
+    padding: 18px;
+  }
+
+  .hero-card-lyrics {
+    width: 60%;
+  }
+
+  .hero-card-disc {
+    left: 63%;
+    width: 214px;
+    height: 214px;
+  }
+
   .mode-list,
   .bento-grid,
-  .craft-grid {
+  .download-card {
     grid-template-columns: 1fr;
   }
 
-  .bento-card.is-wide {
-    grid-column: span 1;
-  }
-
   .phone-frame {
-    width: 306px;
-    height: 656px;
+    width: min(300px, 100%);
+    height: 590px;
   }
 
-  .download-card {
-    padding: 24px 20px;
+  .faq-q {
+    padding: 16px 18px;
+  }
+
+  .faq-a {
+    padding: 0 18px 16px;
+  }
+
+  .faq-feedback-card {
+    padding: 20px 18px;
+  }
+
+  .footer-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .footer-links {
+    flex-wrap: wrap;
+    gap: 12px 16px;
   }
 }
 

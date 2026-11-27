@@ -1016,20 +1016,38 @@
   });
 
   // Scroll Reveal
-  const revealEls = document.querySelectorAll('.reveal');
+  const revealEls = Array.from(document.querySelectorAll('.reveal'));
+  let revealObserver = null;
+
+  function revealVisibleNow() {
+    const viewportBottom = window.innerHeight + 60;
+    const hashId = window.location.hash ? window.location.hash.slice(1) : '';
+    const hashTarget = hashId ? document.getElementById(hashId) : null;
+
+    revealEls.forEach((el) => {
+      if (el.classList.contains('is-in')) return;
+      const rect = el.getBoundingClientRect();
+      const inHashSection = hashTarget && (hashTarget === el || hashTarget.contains(el));
+      if (inHashSection || (rect.top < viewportBottom && rect.bottom > -80)) {
+        el.classList.add('is-in');
+        if (revealObserver) revealObserver.unobserve(el);
+      }
+    });
+  }
+
   if ('IntersectionObserver' in window) {
-    const observer = new IntersectionObserver(
+    revealObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add('is-in');
-            observer.unobserve(entry.target);
+            revealObserver.unobserve(entry.target);
           }
         });
       },
-      { threshold: 0.12 }
+      { threshold: 0.02, rootMargin: '0px 0px -20px 0px' }
     );
-    revealEls.forEach((el) => observer.observe(el));
+    revealEls.forEach((el) => revealObserver.observe(el));
   } else {
     revealEls.forEach((el) => el.classList.add('is-in'));
   }
@@ -1056,4 +1074,7 @@
   updatePlayIcons();
   applyLanguage(state.lang);
   setMode('now-playing', { animate: false });
+  revealVisibleNow();
+  window.addEventListener('load', revealVisibleNow);
+  window.addEventListener('hashchange', revealVisibleNow);
 })();
