@@ -503,7 +503,7 @@
 
     if (typeof fetch !== 'function') return;
     try {
-      const res = await fetch('https://api.github.com/repos/hdkmjr12/musevee/releases', {
+      const res = await fetch('https://api.github.com/repos/dhaauu/musevee/releases', {
         headers: { Accept: 'application/vnd.github+json' }
       });
       if (!res.ok) return;

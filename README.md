@@ -6,15 +6,15 @@ Pemutar musik *hybrid* modern untuk Android yang menggabungkan koleksi lagu loka
 
 ## Tautan Resmi
 
-- **Website Resmi:** [https://hdkmjr12.github.io/musevee/](https://hdkmjr12.github.io/musevee/)
-- **Unduh APK Android (ARM64):** [GitHub Releases Terbaru](https://github.com/hdkmjr12/musevee/releases/latest)
+- **Website Resmi:** [https://dhaauu.github.io/musevee/](https://dhaauu.github.io/musevee/)
+- **Unduh APK Android (ARM64):** [GitHub Releases Terbaru](https://github.com/dhaauu/musevee/releases/latest)
 - **Kirim Masukan & Lapor Bug:** [Formulir Tally.so](https://tally.so/r/RWPL69)
 
 ---
 
 ## Cara Memasang di Android
 
-1. Unduh file **`MusEvee-v1.0.0-arm64.apk`** dari halaman [Releases](https://github.com/hdkmjr12/musevee/releases/latest) atau langsung melalui [Website Resmi](https://hdkmjr12.github.io/musevee/#download).
+1. Unduh file **`MusEvee-v1.0.0-arm64.apk`** dari halaman [Releases](https://github.com/dhaauu/musevee/releases/latest) atau langsung melalui [Website Resmi](https://dhaauu.github.io/musevee/#download).
 2. Buka file APK dan izinkan **Pasang aplikasi tidak dikenal** (*Install unknown apps*) untuk browser atau file manager.
 3. Jalankan MusEvee dan izinkan akses audio lokal untuk mulai memutar musik offline maupun online.
 
