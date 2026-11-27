@@ -418,19 +418,22 @@ svg {
 
 .btn-secondary {
   height: 50px;
-  padding: 0 22px;
+  padding: 0 18px;
   border-radius: 999px;
-  background: var(--surface-subtle);
+  background: transparent;
+  border: none;
   color: var(--text-strong);
   font-size: 0.9rem;
   font-weight: 600;
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  transition: opacity 0.2s ease, transform 0.22s var(--ease-out-cubic);
 }
 
 .btn-secondary:hover {
-  background: var(--surface-hover);
+  background: transparent;
+  opacity: 0.68;
   transform: translateY(-1px);
 }
 
@@ -808,20 +811,20 @@ svg {
 }
 
 .mode-btn-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  background: var(--surface-subtle);
+  width: 24px;
+  height: 24px;
+  border-radius: 0;
+  background: transparent;
   color: var(--np-primary);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: background-color 0.2s ease, color 0.2s ease, transform 0.3s var(--ease-out-back);
+  transition: color 0.2s ease, transform 0.3s var(--ease-out-back);
 }
 
 .mode-btn.is-active .mode-btn-icon {
-  background: rgba(128, 128, 128, 0.24);
+  background: transparent;
   color: var(--np-on-primary);
   transform: scale(1.05);
 }
@@ -2126,14 +2129,14 @@ svg {
 }
 
 .bento-icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  background: var(--surface-subtle);
+  width: 24px;
+  height: 24px;
+  border-radius: 0;
+  background: transparent;
   color: var(--np-primary);
   display: inline-flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .bento-title {
@@ -2237,14 +2240,14 @@ svg {
 
 /* ---------- Download Center Card ---------- */
 .download-card {
-  padding: 44px;
+  padding: 48px 50px;
   border-radius: 26px;
   background: var(--surface-card);
   border: 1px solid var(--hairline);
   box-shadow: var(--card-shadow);
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-  gap: 40px;
+  gap: 44px;
   align-items: center;
 }
 
@@ -2258,20 +2261,21 @@ svg {
 .dl-spec-pill {
   font-size: 0.76rem;
   font-weight: 600;
-  padding: 5px 12px;
+  padding: 6px 14px;
   border-radius: 999px;
-  background: var(--surface-subtle);
+  background: transparent;
+  border: 1px solid var(--hairline);
   color: var(--text-strong);
 }
 
 .install-steps {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  padding: 24px;
-  border-radius: 20px;
-  background: var(--bg-canvas);
-  border: 1px solid var(--hairline);
+  gap: 16px;
+  padding: 28px;
+  border-radius: 22px;
+  background: var(--surface-card);
+  border: 1px solid var(--hairline-strong);
 }
 
 .install-steps-title {
@@ -2287,6 +2291,13 @@ svg {
   gap: 12px;
   font-size: 0.84rem;
   color: var(--text-muted);
+}
+
+.install-step strong,
+.install-step em {
+  font-weight: 400;
+  font-style: normal;
+  color: inherit;
 }
 
 .install-num {
