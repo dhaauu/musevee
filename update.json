@@ -1,0 +1,23 @@
+{
+  "version": "1.0.0",
+  "versionCode": 1,
+  "apkUrl": "https://github.com/hdkmjr12/musevee/releases/latest/download/MusEvee-v1.0.0-arm64.apk",
+  "bannerUrl": "",
+  "whatsNewTitle": {
+    "id": "Fitur Utama",
+    "en": "Top Features"
+  },
+  "whatsNew": {
+    "id": [
+      "Pemutar musik hybrid: koleksi lokal (MP3, FLAC, M4A) dan streaming online dalam satu antrean.",
+      "Lirik berjalan dengan konversi Romaji instan satu ketukan dan penyesuaian timing permanen.",
+      "Kartu kutipan lirik & Story 9:16 serta pembaruan aplikasi langsung dari dalam aplikasi."
+    ],
+    "en": [
+      "Hybrid music player: local audio files (MP3, FLAC, M4A) and online streaming in one queue.",
+      "Live lyrics with one-tap instant Romaji conversion and permanent timing adjustment.",
+      "Lyrics quote cards & 9:16 Story export plus seamless in-app software updates."
+    ]
+  },
+  "releaseNotesUrl": "https://github.com/hdkmjr12/musevee/releases/latest"
+}

@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MusEvee — Pemutar Musik Hybrid untuk Android</title>
+  <meta name="description" content="MusEvee adalah pemutar musik hybrid modern untuk Android yang menggabungkan koleksi lagu lokal dan streaming online bebas iklan dengan lirik berjalan, Romaji instan, dan kartu kutipan lirik." />
+  <link rel="icon" type="image/png" href="./assets/musevee_logo.png" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <!-- Exact MusEvee Vector Sprites -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+    <!-- MusEvee Disc Note (ic_stat_musevee.xml) -->
+    <symbol id="icon-disc-note" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M12.67,2.6 A1.02,1.02 0 0,1 14.71,2.6 L14.71,15 L12.67,15 Z" />
+      <path fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" d="M13.9,2.6 C17.9,3.6 21.4,7.4 19.6,12.6" />
+      <path fill="currentColor" fill-rule="evenodd" d="M8.49,17.24 m-6.2,0 a6.2,6.2 0 1,0 12.4,0 a6.2,6.2 0 1,0 -12.4,0 Z M8.49,17.24 m-4.4,0 a4.4,4.4 0 1,0 8.8,0 a4.4,4.4 0 1,0 -8.8,0 Z M8.49,17.24 m-3.4,0 a3.4,3.4 0 1,0 6.8,0 a3.4,3.4 0 1,0 -6.8,0 Z M8.49,17.24 m-1.4,0 a1.4,1.4 0 1,0 2.8,0 a1.4,1.4 0 1,0 -2.8,0 Z" />
+    </symbol>
+
+    <!-- NowPlayingRomajiIcon (文 <-> A, inactive outline) -->
+    <symbol id="icon-romaji-off" viewBox="0 0 24 24">
+      <rect x="2" y="10.6" width="11" height="11" rx="2.6" fill="none" stroke="currentColor" stroke-width="1.5" />
+      <path fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" d="M5.1 19 L7.5 13.1 L9.9 19 M5.9 17.2 L9.1 17.2" />
+      <rect x="11" y="2.4" width="11" height="11" rx="2.6" fill="var(--np-bg)" stroke="currentColor" stroke-width="1.5" />
+      <path fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" d="M16.5 4.4 L16.5 5.7 M13.3 6 L19.7 6 M18.2 6.1 Q17.1 9.1 13.7 10.9 M14.8 6.1 Q16.0 9.0 19.3 10.9" />
+      <path fill="none" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round" d="M3.7 8.6 Q3.7 4.1 8.4 4.1 M6.9 2.7 L8.5 4.1 L6.9 5.5 M20.3 15.4 Q20.3 19.9 15.6 19.9 M17.1 18.5 L15.5 19.9 L17.1 21.3" />
+    </symbol>
+
+    <!-- NowPlayingRomajiIcon (文 <-> A, active filled 文) -->
+    <symbol id="icon-romaji-on" viewBox="0 0 24 24">
+      <rect x="2" y="10.6" width="11" height="11" rx="2.6" fill="none" stroke="currentColor" stroke-width="1.65" />
+      <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M5.1 19 L7.5 13.1 L9.9 19 M5.9 17.2 L9.1 17.2" />
+      <rect x="11" y="2.4" width="11" height="11" rx="2.6" fill="currentColor" />
+      <path fill="none" stroke="var(--np-on-primary)" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round" d="M16.5 4.4 L16.5 5.7 M13.3 6 L19.7 6 M18.2 6.1 Q17.1 9.1 13.7 10.9 M14.8 6.1 Q16.0 9.0 19.3 10.9" />
+      <path fill="none" stroke="currentColor" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round" d="M3.7 8.6 Q3.7 4.1 8.4 4.1 M6.9 2.7 L8.5 4.1 L6.9 5.5 M20.3 15.4 Q20.3 19.9 15.6 19.9 M17.1 18.5 L15.5 19.9 L17.1 21.3" />
+    </symbol>
+  </svg>
+
+  <!-- ==================== Sticky Minimal Navbar ==================== -->
+  <header class="site-nav" id="top">
+    <div class="container nav-inner">
+      <a href="#top" class="brand-link" aria-label="MusEvee">
+        <img src="./assets/musevee_logo.png" alt="Logo MusEvee" class="brand-logo" />
+        <span class="brand-name">MusEvee</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Navigasi utama">
+        <a href="#playground" data-i18n="navPlayground">Playground</a>
+        <a href="#features" data-i18n="navFeatures">Fitur</a>
+        <a href="#download" data-i18n="navDownload">Unduh</a>
+        <a href="#faq" data-i18n="navFaq">FAQ</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button type="button" class="icon-pill-btn mograph-press" id="themeToggleBtn" aria-label="Ganti tema gelap atau terang">
+          <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
+          <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4" />
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+          </svg>
+        </button>
+
+        <button type="button" class="icon-pill-btn mograph-press" id="langToggleBtn" aria-label="Switch language">
+          <span id="langToggleLabel">ID</span>
+        </button>
+
+        <a href="#download" class="nav-download-btn mograph-press">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+          <span data-i18n="navCta">Unduh</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ==================== Minimalist Monochrome Hero ==================== -->
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <h1 class="hero-title">
+            <span data-i18n="heroTitle1">Musik offline &amp; online,</span><br />
+            <span class="hero-title-muted" data-i18n="heroTitle2">dalam satu pemutar.</span>
+          </h1>
+
+          <p class="hero-subtitle" data-i18n="heroSubtitle">
+            Pemutar musik hybrid modern untuk Android yang menggabungkan koleksi lagu lokal dan streaming online dalam satu tampilan bersih. Putar musik bebas iklan dengan lirik berjalan, Romaji instan, dan unduh lagu offline lengkap dengan metadata.
+          </p>
+
+          <div class="hero-cta-row">
+            <a href="#download" class="btn-primary mograph-press">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+              <span data-i18n="heroDownloadBtn">Unduh APK</span>
+            </a>
+
+            <a href="#features" class="btn-secondary mograph-press">
+              <span data-i18n="heroExploreBtn">Lihat Fitur</span>
+            </a>
+          </div>
+
+          <div class="hero-stats">
+            <div>
+              <span class="hero-stat-val" data-i18n="stat1Val">Hybrid</span>
+              <span class="hero-stat-lbl" data-i18n="stat1Lbl">Lokal &amp; Online</span>
+            </div>
+            <div>
+              <span class="hero-stat-val" data-i18n="stat2Val">Bebas Iklan</span>
+              <span class="hero-stat-lbl" data-i18n="stat2Lbl">Tanpa Langganan</span>
+            </div>
+            <div>
+              <span class="hero-stat-val" data-i18n="stat3Val">Lirik &amp; Romaji</span>
+              <span class="hero-stat-lbl" data-i18n="stat3Lbl">Siap Offline</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero Right: Pure MusEvee Monochrome Vinyl Preview Card + Floating Mini Player -->
+        <div class="hero-visual">
+          <div class="hero-vinyl-card">
+            <div class="hero-card-top" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2" /><circle cx="12" cy="12" r="2" /><circle cx="19" cy="12" r="2" /></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--np-inactive)" stroke-width="1.9"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>
+            </div>
+
+            <div class="hero-card-lyrics">
+              <div class="hero-ly-muted js-hero-ly-prev">十度の風に 肩をすくめて</div>
+              <div class="hero-ly-active js-hero-ly-active">静かな街を 歩いてゆこう</div>
+              <div class="hero-ly-muted js-hero-ly-next">温かいカップ 手のひらに包む</div>
+            </div>
+
+            <div class="hero-card-disc" id="heroVinylDisc" title="Klik untuk Putar / Jeda">
+              <div class="vinyl-disc-rotor is-paused" id="heroDiscRotor">
+                <div class="cover-art js-track-cover" data-track="0"></div>
+                <div class="vinyl-grooves"></div>
+              </div>
+              <div class="vinyl-center-hole"></div>
+            </div>
+
+            <div style="height:8px"></div>
+          </div>
+
+          <div class="hero-mini-player" aria-label="Mini Player MusEvee">
+            <div class="mini-disc">
+              <div class="vinyl-disc-rotor is-paused" id="heroMiniRotor">
+                <div class="cover-art js-track-cover" data-track="0"></div>
+              </div>
+              <div class="mini-disc-hole"></div>
+            </div>
+            <div class="mini-info">
+              <div class="mini-title js-track-title">10°C</div>
+              <div class="mini-artist js-track-artist">Sharou</div>
+            </div>
+            <div class="mini-controls">
+              <button type="button" class="mini-btn mograph-press" id="heroPrevBtn" data-i18n-aria="ariaPrev" aria-label="Sebelumnya">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M6 6h2v12H6zm3.5 6 8.5 6V6z" />
+                </svg>
+              </button>
+              <button type="button" class="mini-btn mograph-press" id="heroPlayBtn" data-i18n-aria="ariaPlayPause" aria-label="Putar atau jeda">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" class="js-play-icon" aria-hidden="true">
+                  <polygon points="7,4.5 20,12 7,19.5" />
+                </svg>
+              </button>
+              <button type="button" class="mini-btn mograph-press" id="heroNextBtn" data-i18n-aria="ariaNext" aria-label="Berikutnya">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M16 6h2v12h-2zM6 18l8.5-6L6 6z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== Interactive Playground (4 Focused Modes) ==================== -->
+    <section class="section section-tinted" id="playground">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-eyebrow">
+            <svg width="14" height="14" aria-hidden="true"><use href="#icon-disc-note" /></svg>
+            <span data-i18n="pgEyebrow">INTERACTIVE PLAYGROUND</span>
+          </div>
+          <h2 class="section-title" data-i18n="pgTitle">Rasakan langsung pengalaman MusEvee.</h2>
+          <p class="section-desc" data-i18n="pgDesc">
+            Coba langsung antarmuka asli MusEvee sebelum mengunduh. Pilih fitur di bawah untuk melihat cara kerja pemutar, lirik, Romaji, hingga kartu kutipan.
+          </p>
+        </div>
+
+        <div class="playground-shell">
+          <!-- Left: EXACTLY 4 Clean Interactive Modes -->
+          <div class="playground-controls">
+            <div class="mode-list" role="tablist" aria-label="Mode fitur MusEvee">
+              <button type="button" class="mode-btn mograph-press is-active" role="tab" aria-selected="true" data-mode="now-playing">
+                <span class="mode-btn-icon">
+                  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <circle cx="12" cy="12" r="9" />
+                    <circle cx="12" cy="12" r="2.5" />
+                  </svg>
+                </span>
+                <span class="mode-btn-text">
+                  <span class="mode-btn-title" data-i18n="mode1Title">Now Playing &amp; Morph Pill</span>
+                </span>
+                <svg class="mode-btn-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6" /></svg>
+              </button>
+
+              <button type="button" class="mode-btn mograph-press" role="tab" aria-selected="false" data-mode="lyrics-stage">
+                <span class="mode-btn-icon">
+                  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                    <line x1="6" y1="7" x2="18" y2="7" />
+                    <line x1="4" y1="12" x2="20" y2="12" />
+                    <line x1="7" y1="17" x2="17" y2="17" />
+                  </svg>
+                </span>
+                <span class="mode-btn-text">
+                  <span class="mode-btn-title" data-i18n="mode2Title">Panggung Lirik</span>
+                </span>
+                <svg class="mode-btn-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6" /></svg>
+              </button>
+
+              <button type="button" class="mode-btn mograph-press" role="tab" aria-selected="false" data-mode="romaji">
+                <span class="mode-btn-icon">
+                  <svg width="19" height="19" aria-hidden="true"><use href="#icon-romaji-off" /></svg>
+                </span>
+                <span class="mode-btn-text">
+                  <span class="mode-btn-title" data-i18n="mode3Title">Romaji Instan</span>
+                </span>
+                <svg class="mode-btn-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6" /></svg>
+              </button>
+
+              <button type="button" class="mode-btn mograph-press" role="tab" aria-selected="false" data-mode="share-card">
+                <span class="mode-btn-icon">
+                  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="4" y="4" width="16" height="16" rx="3" />
+                    <path d="M8 10h8M8 14h5" />
+                  </svg>
+                </span>
+                <span class="mode-btn-text">
+                  <span class="mode-btn-title" data-i18n="mode4Title">Share Card</span>
+                </span>
+                <svg class="mode-btn-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6" /></svg>
+              </button>
+            </div>
+
+            <!-- Live Explainer + Demo Track Switcher -->
+            <div class="mode-detail-card">
+              <p class="mode-detail-desc" id="modeDetailDesc"></p>
+
+              <div class="track-switcher-row">
+                <div class="track-switcher-left">
+                  <span class="track-switcher-label" data-i18n="sampleTrackLabel">Coba Lagu:</span>
+                  <div class="track-chips" id="trackChips">
+                    <button type="button" class="track-chip mograph-press is-active" data-track-idx="0">10°C</button>
+                    <button type="button" class="track-chip mograph-press" data-track-idx="1">3:03 PM</button>
+                    <button type="button" class="track-chip mograph-press" data-track-idx="2">2:23 AM</button>
+                  </div>
+                </div>
+                <button type="button" class="replay-btn mograph-press" id="replayModeBtn">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="23 4 23 10 17 10" />
+                    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+                  </svg>
+                  <span data-i18n="replayBtn">Putar Ulang</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: 1:1 Authentic MusEvee Android Phone Mockup -->
+          <div class="playground-stage">
+            <div class="phone-frame">
+              <div class="phone-screen" id="phoneScreen" data-panel="1">
+                <!-- Status Bar -->
+                <div class="phone-statusbar">
+                  <span>11:45</span>
+                  <div class="phone-camera-dot" aria-hidden="true"></div>
+                  <div class="phone-status-icons" aria-hidden="true">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21L1 9.5C5.5 5 18.5 5 23 9.5L12 21z" /></svg>
+                    <svg width="16" height="11" viewBox="0 0 28 16" fill="none"><rect x="1" y="2" width="22" height="12" rx="3" stroke="currentColor" stroke-width="2" /><rect x="4" y="5" width="14" height="6" rx="1.2" fill="currentColor" /><rect x="24.5" y="5.5" width="2.2" height="5" rx="1" fill="currentColor" /></svg>
+                  </div>
+                </div>
+
+                <!-- Top Drag Handle + Header Icons (exact real MusEvee!) -->
+                <div class="np-handle-wrap" aria-hidden="true">
+                  <div class="np-drag-handle"></div>
+                </div>
+
+                <div class="np-topbar">
+                  <button type="button" class="np-top-btn mograph-press" id="npMoreBtn" data-i18n-aria="ariaMenu" aria-label="Menu">
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2" /><circle cx="12" cy="12" r="2" /><circle cx="19" cy="12" r="2" /></svg>
+                  </button>
+
+                  <div class="np-topbar-right">
+                    <div class="panel0-only-tools">
+                      <!-- Tilted Mic (Lyrics Source) -->
+                      <button type="button" class="np-top-btn mograph-press" id="phoneMicBtn" data-i18n-aria="ariaLyricsSource" aria-label="Sumber lirik">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M15.5 4.5a3.5 3.5 0 0 1 4 4L14 14l-4-4 5.5-5.5z" />
+                          <path d="M10 10l-4.2 6.8a1.6 1.6 0 0 0 2.3 2.1L14 14" />
+                        </svg>
+                      </button>
+                      <!-- Inline Selection Trigger (Plain/Select Icon) -->
+                      <button type="button" class="np-top-btn mograph-press" id="phoneSelectBtn" data-i18n-aria="ariaSelectLyrics" aria-label="Pilih lirik">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+                          <rect x="3" y="5" width="18" height="14" rx="2.5" />
+                          <line x1="7" y1="10" x2="17" y2="10" />
+                          <line x1="7" y1="14" x2="13" y2="14" />
+                        </svg>
+                      </button>
+                    </div>
+
+                    <!-- Heart Favorite -->
+                    <button type="button" class="np-top-btn np-heart-btn mograph-press" id="npFavBtn" data-i18n-aria="ariaFavorite" aria-label="Favorit">
+                      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" id="npHeartSvg">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Middle Stage (Panel 0: Panggung Lirik | Panel 1: Vinyl Now Playing | Queue Sheet) -->
+                <div class="np-stage-container">
+                  <div class="np-pager-track" id="npPagerTrack">
+                    <!-- PANEL 0: Panggung Lirik -->
+                    <div class="np-panel" id="panelLyrics">
+                      <div class="panel-lyrics-stage">
+                        <div class="lyrics-viewport" id="phoneLyricsList"></div>
+
+                        <!-- Frameless Center-Split Cancel / Share Bar -->
+                        <div class="selection-split-wrap">
+                          <div class="selection-split-bar" id="selectionSplitBar">
+                            <button type="button" class="sel-split-btn sel-btn-cancel mograph-press" id="selCancelBtn">
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+                              <span data-i18n="selCancel">Batal</span>
+                            </button>
+                            <button type="button" class="sel-split-btn sel-btn-share mograph-press" id="selShareBtn">
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" /><polyline points="16 6 12 2 8 6" /><line x1="12" y1="2" x2="12" y2="15" /></svg>
+                              <span data-i18n="selShare">Bagikan</span>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- PANEL 1: Spinning Vinyl Now Playing -->
+                    <div class="np-panel" id="panelVinyl">
+                      <div class="panel-vinyl-stage">
+                        <div class="np-intro-lyrics">
+                          <div class="intro-lyric intro-lyric-prev" id="introPrev">十度の風に 肩をすくめて</div>
+                          <div class="intro-lyric intro-lyric-active" id="introActive">静かな街を 歩いてゆこう</div>
+                          <div class="intro-lyric intro-lyric-next" id="introNext">温かいカップ 手のひらに包む</div>
+                        </div>
+
+                        <div class="np-vinyl-disc" id="npVinylDisc" title="Ketuk piringan untuk Putar/Jeda">
+                          <div class="vinyl-disc-rotor is-paused" id="phoneDiscRotor">
+                            <div class="cover-art js-track-cover" data-track="0"></div>
+                            <div class="vinyl-grooves"></div>
+                          </div>
+                          <div class="vinyl-center-hole"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Playback Queue Sheet (Slides up when Queue / Morph Pill is open!) -->
+                  <div class="queue-overlay" id="queueOverlay">
+                    <div class="np-handle-wrap" style="padding:0" aria-hidden="true">
+                      <div class="np-drag-handle"></div>
+                    </div>
+                    <div class="queue-header">
+                      <span class="queue-title" data-i18n="queueTitle">Playback Queue</span>
+                      <div class="queue-actions">
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--np-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.178 8c5.096 0 5.096 8 0 8-5.095 0-7.133-8-12.739-8-4.585 0-4.585 8 0 8 5.606 0 7.644-8 12.74-8z" /></svg>
+                        <span data-i18n="queueClear">Clear</span>
+                      </div>
+                    </div>
+
+                    <div class="queue-list" id="queueList">
+                      <div class="queue-row is-active" data-track-idx="0">
+                        <span class="queue-eq" aria-hidden="true"><span></span><span></span><span></span></span>
+                        <div class="queue-thumb"><div class="cover-art" data-track="0"></div></div>
+                        <div class="queue-meta">
+                          <div class="queue-song">10°C</div>
+                          <div class="queue-sub" data-queue-sub="0">Sharou • 03:37</div>
+                        </div>
+                        <div class="queue-row-right" aria-hidden="true">
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="9" x2="20" y2="9" /><line x1="4" y1="15" x2="20" y2="15" /></svg>
+                        </div>
+                      </div>
+
+                      <div class="queue-row" data-track-idx="1">
+                        <span class="queue-eq" style="opacity:0" aria-hidden="true"><span></span><span></span><span></span></span>
+                        <div class="queue-thumb"><div class="cover-art" data-track="1"></div></div>
+                        <div class="queue-meta">
+                          <div class="queue-song">3:03 PM</div>
+                          <div class="queue-sub" data-queue-sub="1">Sharou • 02:20</div>
+                        </div>
+                        <div class="queue-row-right" aria-hidden="true">
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="9" x2="20" y2="9" /><line x1="4" y1="15" x2="20" y2="15" /></svg>
+                        </div>
+                      </div>
+
+                      <div class="queue-row" data-track-idx="2">
+                        <span class="queue-eq" style="opacity:0" aria-hidden="true"><span></span><span></span><span></span></span>
+                        <div class="queue-thumb"><div class="cover-art" data-track="2"></div></div>
+                        <div class="queue-meta">
+                          <div class="queue-song">2:23 AM</div>
+                          <div class="queue-sub" data-queue-sub="2">Sharou • 03:15</div>
+                        </div>
+                        <div class="queue-row-right" aria-hidden="true">
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="9" x2="20" y2="9" /><line x1="4" y1="15" x2="20" y2="15" /></svg>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Shared Bottom Transport Cluster (1:1 Real MusEvee!) -->
+                <div class="np-bottom-cluster">
+                  <div class="np-meta-collapsible">
+                    <div class="np-pager-dots">
+                      <button type="button" class="np-dot" id="pagerDot0" data-i18n-aria="ariaLyricsPanel" aria-label="Panggung Lirik"></button>
+                      <button type="button" class="np-dot is-active" id="pagerDot1" data-i18n-aria="ariaVinylPanel" aria-label="Now Playing"></button>
+                      <span class="np-dot" aria-hidden="true"></span>
+                    </div>
+
+                    <div class="np-centered-meta">
+                      <div class="np-song-title js-track-title">10°C</div>
+                      <div class="np-song-artist js-track-artist">Sharou</div>
+                    </div>
+
+                    <div class="np-seek-wrap">
+                      <div class="np-seek-track" id="npSeekTrack">
+                        <div class="np-seek-fill" id="npSeekFill"></div>
+                      </div>
+                      <div class="np-seek-times">
+                        <span id="npCurrentTime">00:00</span>
+                        <span id="npTotalTime">03:37</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- 5-Slot Transport Row: [文↔A]  [|◀  ( ▶ )  ▶|]  [≡♪] -->
+                  <div class="np-transport-bar">
+                    <button type="button" class="np-side-tool mograph-press" id="phoneRomajiBtn" data-i18n-aria="ariaRomaji" aria-label="Toggle Romaji">
+                      <svg width="21" height="21" id="phoneRomajiSvg"><use href="#icon-romaji-off" /></svg>
+                    </button>
+
+                    <div class="transport-morph-row" id="transportMorphRow">
+                      <button type="button" class="transport-skip transport-skip-prev mograph-press" id="npPrevBtn" data-i18n-aria="ariaPrev" aria-label="Sebelumnya">
+                        <svg width="21" height="21" viewBox="0 0 24 24" fill="currentColor"><path d="M5 5h2.2v14H5zm3.4 7L19 19V5z" /></svg>
+                      </button>
+
+                      <div class="transport-pill" id="transportPill">
+                        <button type="button" class="tp-seg tp-seg-side is-on" id="tpShuffleBtn" data-i18n-aria="ariaShuffle" aria-label="Acak">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8" /><line x1="4" y1="20" x2="21" y2="3" /><polyline points="21 16 21 21 16 21" /><line x1="15" y1="15" x2="21" y2="21" /></svg>
+                        </button>
+                        <span class="tp-divider" aria-hidden="true"></span>
+                        <button type="button" class="tp-seg tp-seg-center" id="npPlayBtn" data-i18n-aria="ariaPlayPause" aria-label="Putar atau jeda">
+                          <svg width="21" height="21" viewBox="0 0 24 24" fill="currentColor" class="js-play-icon">
+                            <polygon points="7,4.5 20,12 7,19.5" />
+                          </svg>
+                        </button>
+                        <span class="tp-divider" aria-hidden="true"></span>
+                        <button type="button" class="tp-seg tp-seg-side" id="tpRepeatBtn" data-i18n-aria="ariaRepeat" aria-label="Ulangi">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9" /><path d="M3 11V9a4 4 0 0 1 4-4h14" /><polyline points="7 23 3 19 7 15" /><path d="M21 13v2a4 4 0 0 1-4 4H3" /></svg>
+                        </button>
+                      </div>
+
+                      <button type="button" class="transport-skip transport-skip-next mograph-press" id="npNextBtn" data-i18n-aria="ariaNext" aria-label="Berikutnya">
+                        <svg width="21" height="21" viewBox="0 0 24 24" fill="currentColor"><path d="M16.8 5H19v14h-2.2zM5 19l10.6-7L5 5z" /></svg>
+                      </button>
+                    </div>
+
+                    <button type="button" class="np-side-tool np-side-tool-queue is-dim mograph-press" id="phoneQueueBtn" data-i18n-aria="ariaQueue" aria-label="Antrean Putar">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="6" x2="15" y2="6" />
+                        <line x1="3" y1="11" x2="15" y2="11" />
+                        <line x1="3" y1="16" x2="10" y2="16" />
+                        <path d="M16 17V9l5-1.2" />
+                        <circle cx="14.5" cy="17.5" r="2" fill="currentColor" stroke="none" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Authentic Share Lyrics Card Bottom Sheet (1:1 musevee_share_card.png & story) -->
+                <div class="share-sheet-backdrop" id="shareSheetBackdrop">
+                  <div class="share-sheet">
+                    <div class="share-sheet-handle" id="shareSheetHandle" title="Tutup"></div>
+
+                    <div class="share-sheet-heading">
+                      <h4 data-i18n="shareSheetTitle">Share Lyrics Card</h4>
+                      <p data-i18n="shareSheetSub">Pratinjau kartu lirik sebelum dibagikan</p>
+                    </div>
+
+                    <div class="share-preview-stage">
+                      <div class="lyrics-share-card" id="lyricsShareCard">
+                        <div class="share-card-blur-bg cover-art js-track-cover" data-track="0"></div>
+                        <div class="share-card-scrim"></div>
+                        <div class="share-card-inner">
+                          <div class="share-card-top-brand">
+                            <svg width="14" height="14" aria-hidden="true"><use href="#icon-disc-note" /></svg>
+                            <span>MusEvee</span>
+                          </div>
+                          <div class="share-card-lines" id="shareCardLines"></div>
+                          <div class="share-card-footer">
+                            <div class="share-card-thumb"><div class="cover-art js-track-cover" data-track="0"></div></div>
+                            <div>
+                              <div class="share-card-song js-track-title">10°C</div>
+                              <div class="share-card-artist js-track-artist">Sharou</div>
+                              <div class="share-story-inline-brand">
+                                <svg width="9" height="9" aria-hidden="true"><use href="#icon-disc-note" /></svg>
+                                <span>MusEvee</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Frameless Switch to Story with bold outline monochrome switch -->
+                    <label class="story-switch-row" id="storySwitchRow">
+                      <span class="story-switch-label" data-i18n="switchToStory">Beralih ke Story</span>
+                      <button type="button" role="switch" aria-checked="false" class="musevee-switch" id="storySwitchBtn" data-i18n-aria="switchToStory" aria-label="Beralih ke Story"></button>
+                    </label>
+
+                    <div class="share-sheet-actions">
+                      <button type="button" class="sheet-btn sheet-btn-muted mograph-press" id="shareSaveBtn">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>
+                        <span data-i18n="sheetSave">Simpan</span>
+                      </button>
+                      <button type="button" class="sheet-btn sheet-btn-solid mograph-press" id="shareSendBtn">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" /><polyline points="16 6 12 2 8 6" /><line x1="12" y1="2" x2="12" y2="15" /></svg>
+                        <span data-i18n="sheetShare">Bagikan</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Floating SnackBar ABOVE Transport Row (1:1 musevee_romaji_snack.png) -->
+                <div class="phone-snackbar-clip" aria-live="polite">
+                  <div class="phone-snackbar" id="phoneSnackbar">
+                    <span id="phoneSnackbarText">Lirik dikonversi ke Romaji</span>
+                  </div>
+                </div>
+
+                <div class="phone-home-indicator" aria-hidden="true"><span></span></div>
+              </div>
+            </div>
+
+            <div class="stage-tap-hint">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v0" /><path d="M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v6" /><path d="M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8" /><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15" /></svg>
+              <span data-i18n="stageTapHint">Tips: kamu juga bisa mengetuk ikon Antrean (≡♪), Romaji (文↔A), lirik, atau piringan di dalam HP.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== Pure Monochrome Bento Features ==================== -->
+    <section class="section" id="features">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-eyebrow" data-i18n="featEyebrow">FITUR UTAMA</div>
+          <h2 class="section-title" data-i18n="featTitle">Satu aplikasi untuk seluruh musikmu.</h2>
+          <p class="section-desc" data-i18n="featDesc">
+            Semua kebebasan memutar file offline, streaming lagu online, hingga menyimpan koleksi favorit tanpa iklan atau batasan langganan.
+          </p>
+        </div>
+
+        <div class="bento-grid">
+          <article class="bento-card is-wide reveal">
+            <div class="bento-icon">
+              <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9" /><circle cx="12" cy="12" r="2.5" /><path d="M12 3v2" /></svg>
+            </div>
+            <h3 class="bento-title" data-i18n="bento1Title">Pustaka Hybrid: Offline &amp; Streaming</h3>
+            <p class="bento-desc" data-i18n="bento1Desc">
+              Putar koleksi audio lokal dan katalog musik online secara mulus di satu tempat. Kelola lagu berdasarkan Folder, Album, Artis, dan Playlist dengan dukungan MP3, FLAC, M4A, Tag Editor, serta pemutaran latar belakang bebas iklan.
+            </p>
+            <div class="bento-tags">
+              <span class="bento-tag" data-i18n="bento1Tag1">Offline &amp; Online</span>
+              <span class="bento-tag" data-i18n="bento1Tag2">MP3 &amp; FLAC</span>
+              <span class="bento-tag" data-i18n="bento1Tag3">Folder &amp; Tag Editor</span>
+              <span class="bento-tag" data-i18n="bento1Tag4">Bebas Iklan</span>
+            </div>
+          </article>
+
+          <article class="bento-card reveal">
+            <div class="bento-icon">
+              <svg width="21" height="21" aria-hidden="true"><use href="#icon-romaji-off" /></svg>
+            </div>
+            <h3 class="bento-title" data-i18n="bento2Title">Lirik Berjalan, Romaji &amp; Timing</h3>
+            <p class="bento-desc" data-i18n="bento2Desc">
+              Ikuti setiap bait lagu dengan lirik akurat lengkap dengan konversi Romaji satu ketukan untuk lagu Jepang. Tarik lirik otomatis dari LRCLIB atau atur timing presisi lalu simpan permanen ke file audio.
+            </p>
+            <div class="bento-tags">
+              <span class="bento-tag">LRCLIB</span>
+              <span class="bento-tag" data-i18n="bento2Tag2">Romaji Instan</span>
+              <span class="bento-tag" data-i18n="bento2Tag3">Lirik Offline</span>
+            </div>
+          </article>
+
+          <article class="bento-card reveal">
+            <div class="bento-icon">
+              <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3" /><path d="M8 10h8M8 14h5" /></svg>
+            </div>
+            <h3 class="bento-title" data-i18n="bento3Title">Kartu Kutipan Lirik &amp; Story 9:16</h3>
+            <p class="bento-desc" data-i18n="bento3Desc">
+              Bagikan potongan lirik favoritmu dalam hitungan detik langsung dari layar pemutar. Pilih baris yang kamu suka dan ekspor sebagai kartu elegan atau Story 9:16 siap unggah.
+            </p>
+            <div class="bento-tags">
+              <span class="bento-tag" data-i18n="bento3Tag1">Pilih Baris</span>
+              <span class="bento-tag">Story 9:16</span>
+              <span class="bento-tag" data-i18n="bento3Tag3">Ekspor HD</span>
+            </div>
+          </article>
+
+          <article class="bento-card reveal">
+            <div class="bento-icon">
+              <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>
+            </div>
+            <h3 class="bento-title" data-i18n="bento4Title">Unduh Lagu &amp; Auto-Metadata</h3>
+            <p class="bento-desc" data-i18n="bento4Desc">
+              Simpan lagu favoritmu untuk didengarkan kapan saja tanpa kuota internet. Judul, artis, album, sampul resolusi tinggi, dan lirik tertanam langsung otomatis ke folder pilihanmu.
+            </p>
+            <div class="bento-tags">
+              <span class="bento-tag" data-i18n="bento4Tag1">Simpan Offline</span>
+              <span class="bento-tag">Auto-Tagging</span>
+            </div>
+          </article>
+
+          <article class="bento-card reveal">
+            <div class="bento-icon">
+              <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="15" y2="6" /><line x1="3" y1="11" x2="15" y2="11" /><line x1="3" y1="16" x2="10" y2="16" /><path d="M16 17V9l5-1.2" /><circle cx="14.5" cy="17.5" r="2" fill="currentColor" stroke="none" /></svg>
+            </div>
+            <h3 class="bento-title" data-i18n="bento5Title">Antrean &amp; Pemutaran Latar Belakang</h3>
+            <p class="bento-desc" data-i18n="bento5Desc">
+              Nikmati musik terus berjalan lancar saat membuka aplikasi lain maupun ketika layar ponsel terkunci. Atur antrean putar lintas lagu lokal dan online dengan mudah tanpa gangguan iklan.
+            </p>
+            <div class="bento-tags">
+              <span class="bento-tag">Background Play</span>
+              <span class="bento-tag" data-i18n="bento5Tag2">Antrean Fleksibel</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== Download Section ==================== -->
+    <section class="section section-bordered" id="download">
+      <div class="container">
+        <div class="download-card reveal">
+          <div>
+            <div class="section-eyebrow">
+              <svg width="14" height="14" aria-hidden="true"><use href="#icon-disc-note" /></svg>
+              <span>ANDROID RELEASE</span>
+            </div>
+            <h2 class="section-title" style="margin-bottom:10px" data-i18n="dlTitle">Unduh MusEvee untuk Android</h2>
+            <p class="section-desc" data-i18n="dlDesc">
+              Gratis, ringan, dan bebas iklan. Nikmati pemutar musik hybrid lengkap untuk koleksi offline maupun streaming langsung di ponsel Android-mu.
+            </p>
+
+            <div class="dl-spec-pills">
+              <span class="dl-spec-pill">v1.0.0</span>
+              <span class="dl-spec-pill">ARM64 (arm64-v8a)</span>
+              <span class="dl-spec-pill">24.8 MB</span>
+              <span class="dl-spec-pill">Android 8.0+</span>
+            </div>
+
+            <div class="hero-cta-row" style="margin-bottom:0">
+              <a href="https://github.com/hdkmjr12/musevee/releases/latest" target="_blank" rel="noopener noreferrer" class="btn-primary mograph-press">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="7 10 12 15 17 10" />
+                  <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+                <span data-i18n="dlCtaPrimary">Unduh MusEvee v1.0.0</span>
+              </a>
+              <a href="https://tally.so/r/RWPL69" target="_blank" rel="noopener noreferrer" class="btn-secondary mograph-press" id="dlFeedbackBtn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                </svg>
+                <span data-i18n="dlCtaFeedback">Kirim Masukan / Lapor Bug</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="install-steps">
+            <h3 class="install-steps-title" data-i18n="installTitle">Cara Pasang APK di Android</h3>
+            <div class="install-step">
+              <span class="install-num">1</span>
+              <span data-i18n="installStep1">Unduh file <strong>MusEvee-v1.0.0-arm64.apk</strong> melalui tombol unduh di halaman ini.</span>
+            </div>
+            <div class="install-step">
+              <span class="install-num">2</span>
+              <span data-i18n="installStep2">Buka file APK dan aktifkan izin <em>Pasang aplikasi tidak dikenal</em> untuk browser atau file manager kamu.</span>
+            </div>
+            <div class="install-step">
+              <span class="install-num">3</span>
+              <span data-i18n="installStep3">Buka MusEvee, izinkan akses audio lokal, lalu mulai putar koleksi offline maupun streaming favoritmu.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== FAQ Accordion ==================== -->
+    <section class="section section-tinted" id="faq">
+      <div class="container">
+        <div class="section-header centered">
+          <div class="section-eyebrow">FAQ</div>
+          <h2 class="section-title" data-i18n="faqTitle">Pertanyaan yang sering diajukan</h2>
+        </div>
+
+        <div class="faq-list">
+          <div class="faq-item is-open">
+            <button type="button" class="faq-q" aria-expanded="true">
+              <span data-i18n="faq1Q">Apakah MusEvee gratis dan bebas iklan?</span>
+              <svg class="faq-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
+            </button>
+            <div class="faq-a-wrap"><div class="faq-a-inner">
+              <p class="faq-a" data-i18n="faq1A">Ya, MusEvee 100% gratis, bebas iklan, dan tanpa langganan. Kamu bisa memutar musik di latar belakang maupun saat layar terkunci tanpa gangguan.</p>
+            </div></div>
+          </div>
+
+          <div class="faq-item">
+            <button type="button" class="faq-q" aria-expanded="false">
+              <span data-i18n="faq2Q">Apakah MusEvee bisa dipakai offline dan online sekaligus?</span>
+              <svg class="faq-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
+            </button>
+            <div class="faq-a-wrap"><div class="faq-a-inner">
+              <p class="faq-a" data-i18n="faq2A">Bisa! MusEvee adalah pemutar musik hybrid yang memutar koleksi audio lokal (MP3, FLAC, M4A) sekaligus katalog streaming online dalam satu antrean yang sama.</p>
+            </div></div>
+          </div>
+
+          <div class="faq-item">
+            <button type="button" class="faq-q" aria-expanded="false">
+              <span data-i18n="faq3Q">Apakah lirik dan Romaji tetap bisa dipakai tanpa internet?</span>
+              <svg class="faq-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
+            </button>
+            <div class="faq-a-wrap"><div class="faq-a-inner">
+              <p class="faq-a" data-i18n="faq3A">Ya! Lirik yang tertanam di file audio maupun hasil penyesuaian timing akan langsung terbaca secara offline kapan saja.</p>
+            </div></div>
+          </div>
+
+          <div class="faq-item">
+            <button type="button" class="faq-q" aria-expanded="false">
+              <span data-i18n="faq4Q">Bagaimana cara memperbarui MusEvee ke versi terbaru?</span>
+              <svg class="faq-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
+            </button>
+            <div class="faq-a-wrap"><div class="faq-a-inner">
+              <p class="faq-a" data-i18n="faq4A">Cukup unduh file APK versi terbaru dari halaman ini lalu pasang langsung di atas versi lama tanpa kehilangan playlist maupun pengaturanmu.</p>
+            </div></div>
+          </div>
+        </div>
+
+        <!-- Subtle Monochrome Feedback Prompt Card below FAQ -->
+        <div class="faq-feedback-card reveal">
+          <div class="faq-feedback-copy">
+            <h3 class="faq-feedback-title" data-i18n="faqFeedbackTitle">Menemukan bug atau punya saran fitur?</h3>
+            <p class="faq-feedback-desc" data-i18n="faqFeedbackDesc">Bantu kami menyempurnakan MusEvee di pembaruan berikutnya dengan mengirimkan laporan bug atau ide fiturmu.</p>
+          </div>
+          <a href="https://tally.so/r/RWPL69" target="_blank" rel="noopener noreferrer" class="btn-secondary faq-feedback-btn mograph-press" id="faqFeedbackBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+            </svg>
+            <span data-i18n="faqFeedbackBtn">Kirim Masukan &amp; Lapor Bug</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==================== Minimal Footer ==================== -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <svg width="18" height="18" aria-hidden="true"><use href="#icon-disc-note" /></svg>
+        <span>MusEvee</span>
+      </div>
+      <div data-i18n="footerNote">Satu pemutar musik hybrid untuk semua lagumu. • Demo BGM: しゃろう (Sharou)</div>
+      <div class="footer-links">
+        <a href="#playground" data-i18n="navPlayground">Playground</a>
+        <a href="#features" data-i18n="navFeatures">Fitur</a>
+        <a href="#download" data-i18n="navDownload">Unduh</a>
+        <a href="#faq" data-i18n="navFaq">FAQ</a>
+        <a href="https://tally.so/r/RWPL69" target="_blank" rel="noopener noreferrer" id="footerFeedbackLink" data-i18n="navFeedback">Kirim Masukan</a>
+      </div>
+    </div>
+  </footer>
+
+  <audio id="demoAudio" preload="metadata"></audio>
+  <script src="./app.js"></script>
+</body>
+</html>
