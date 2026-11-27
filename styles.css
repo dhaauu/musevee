@@ -892,22 +892,6 @@ svg {
   border-radius: 999px;
 }
 
-.replay-btn {
-  font-size: 0.76rem;
-  font-weight: 600;
-  color: var(--text-strong);
-  background: var(--surface-subtle);
-  padding: 5px 12px;
-  border-radius: 999px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.replay-btn:hover {
-  background: var(--surface-hover);
-}
-
 .mode-detail-desc {
   margin: 0 0 14px;
   font-size: 0.86rem;

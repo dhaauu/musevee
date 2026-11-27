@@ -120,7 +120,6 @@
       mode2Title: 'Panggung Lirik',
       mode3Title: 'Romaji Instan',
       mode4Title: 'Share Card',
-      replayBtn: 'Putar Ulang',
       sampleTrackLabel: 'Coba Lagu:',
       selCancel: 'Batal',
       selShare: 'Bagikan',
@@ -243,7 +242,6 @@
       mode2Title: 'Lyrics Stage',
       mode3Title: 'Instant Romaji',
       mode4Title: 'Share Card',
-      replayBtn: 'Replay',
       sampleTrackLabel: 'Try Track:',
       selCancel: 'Cancel',
       selShare: 'Share',
@@ -388,7 +386,6 @@
   // Playground controls
   const modeBtns = Array.from(document.querySelectorAll('.mode-btn'));
   const modeDetailDesc = document.getElementById('modeDetailDesc');
-  const replayModeBtn = document.getElementById('replayModeBtn');
   const trackChips = Array.from(document.querySelectorAll('.track-chip'));
 
   // Phone UI
@@ -884,11 +881,10 @@
   heroPrevBtn.addEventListener('click', () => setTrack(state.trackIdx - 1));
   heroNextBtn.addEventListener('click', () => setTrack(state.trackIdx + 1));
 
-  // Mode buttons & replay
+  // Mode buttons
   modeBtns.forEach((btn) => {
     btn.addEventListener('click', () => setMode(btn.getAttribute('data-mode')));
   });
-  replayModeBtn.addEventListener('click', () => setMode(state.activeMode));
 
   // Track chips
   trackChips.forEach((chip) => {
