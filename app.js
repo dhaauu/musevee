@@ -477,20 +477,20 @@
   }
 
   // -------------------- Hero Live Download Counter --------------------
-  const DOWNLOAD_BASELINE_OFFSET = 161;
+  const DOWNLOAD_BASELINE_OFFSET = 283;
 
   function renderDownloadCount() {
     if (!heroDownloadCount) return;
     const count =
       typeof state.totalDownloads === 'number' && state.totalDownloads >= 0
         ? state.totalDownloads
-        : DOWNLOAD_BASELINE_OFFSET + 1;
+        : DOWNLOAD_BASELINE_OFFSET;
     const locale = state.lang === 'id' ? 'id-ID' : 'en-US';
     heroDownloadCount.textContent = count.toLocaleString(locale);
   }
 
   async function fetchGitHubDownloads() {
-    const cacheKey = 'musevee_dl_count_v2';
+    const cacheKey = 'musevee_dl_count_v3';
     const ttlMs = 10 * 60 * 1000;
     let cached = null;
     try {
@@ -532,7 +532,7 @@
       } catch (_) {}
     } catch (_) {
       if (!cached && state.totalDownloads === null) {
-        state.totalDownloads = DOWNLOAD_BASELINE_OFFSET + 1;
+        state.totalDownloads = DOWNLOAD_BASELINE_OFFSET;
         renderDownloadCount();
       }
     }
