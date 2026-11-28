@@ -477,15 +477,20 @@
   }
 
   // -------------------- Hero Live Download Counter --------------------
+  const DOWNLOAD_BASELINE_OFFSET = 161;
+
   function renderDownloadCount() {
     if (!heroDownloadCount) return;
-    const count = typeof state.totalDownloads === 'number' && state.totalDownloads >= 0 ? state.totalDownloads : 0;
+    const count =
+      typeof state.totalDownloads === 'number' && state.totalDownloads >= 0
+        ? state.totalDownloads
+        : DOWNLOAD_BASELINE_OFFSET + 1;
     const locale = state.lang === 'id' ? 'id-ID' : 'en-US';
     heroDownloadCount.textContent = count.toLocaleString(locale);
   }
 
   async function fetchGitHubDownloads() {
-    const cacheKey = 'musevee_dl_count_v1';
+    const cacheKey = 'musevee_dl_count_v2';
     const ttlMs = 10 * 60 * 1000;
     let cached = null;
     try {
@@ -519,14 +524,15 @@
           });
         }
       });
-      state.totalDownloads = total;
+      const displayTotal = DOWNLOAD_BASELINE_OFFSET + total;
+      state.totalDownloads = displayTotal;
       renderDownloadCount();
       try {
-        localStorage.setItem(cacheKey, JSON.stringify({ count: total, ts: Date.now() }));
+        localStorage.setItem(cacheKey, JSON.stringify({ count: displayTotal, ts: Date.now() }));
       } catch (_) {}
     } catch (_) {
       if (!cached && state.totalDownloads === null) {
-        state.totalDownloads = 0;
+        state.totalDownloads = DOWNLOAD_BASELINE_OFFSET + 1;
         renderDownloadCount();
       }
     }
